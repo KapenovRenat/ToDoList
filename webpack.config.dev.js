@@ -1,8 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const webpackDevServer = require('webpack-dev-server');
 
-module.exports = {
-    entry: './src/index.tsx',
+const config = {
+    mode: 'development',
+    entry: ['webpack/hot/dev-server.js', 'webpack-dev-server/client/index.js?hot=true&live-reload=true', './src/index.tsx'],
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -27,6 +30,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     plugins: [
+        new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
         }),
@@ -49,3 +53,13 @@ module.exports = {
         },
     }
 };
+
+const compiler = webpack(config);
+
+// `hot` and `client` options are disabled because we added them manually
+const server = new webpackDevServer({ hot: false, client: false }, compiler);
+
+(async () => {
+    await server.start();
+    console.log('dev server is running');
+})();
