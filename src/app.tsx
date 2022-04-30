@@ -1,10 +1,11 @@
 import React from 'react';
+import './app.scss';
 
 function App() {
     return (
-        <div>
+        <p className="text-test">
             Hello React Test
-        </div>
+        </p>
     );
 }
 
